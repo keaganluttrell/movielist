@@ -1,7 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import MovieItem from "./movieItem";
+import Grid from "@mui/material/Grid";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { blue, red } from "@mui/material/colors";
+import Header from "./header";
 import MovieList from "./movieList";
+
+const theme = createTheme({
+  palette: {
+    primary: blue,
+    secondary: {
+      main: red[400],
+    },
+  },
+});
 
 async function apiTest(stateFn) {
   const data = await (await axios.get("/api/movies/popular")).data;
@@ -18,7 +31,6 @@ export default function App() {
 
   function addToList(e, movie) {
     e.preventDefault();
-    console.log(movie);
     if (!myList.find((m) => m.id === movie.id)) {
       setMyList([...myList, movie]);
     }
@@ -30,19 +42,31 @@ export default function App() {
   }
 
   return (
-    <div>
-      <MovieList
-        key="popular"
-        title="Popular Movies"
-        movies={popularMovies}
-        action={addToList}
-      />
-      <MovieList
-        key="myList"
-        title="My List"
-        movies={myList}
-        action={removeFromList}
-      />
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header title="Movie Lister" />
+      <Grid
+        container
+        columns={2}
+        direction="row"
+        spacing={2}
+        justifyContent="space-around"
+      >
+        <MovieList
+          key="popular"
+          title="Popular Movies"
+          movies={popularMovies}
+          action={addToList}
+          col={1}
+        />
+        <MovieList
+          key="myList"
+          title="My List"
+          movies={myList}
+          action={removeFromList}
+          col={2}
+        />
+      </Grid>
+    </ThemeProvider>
   );
 }
