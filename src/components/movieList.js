@@ -14,7 +14,6 @@ export default function MovieList({ title, movies, action, col }) {
       gridColumn={col}
     >
       <Typography variant="h6" component="div">
-        {" "}
         {title}
       </Typography>
       {!movies.length && <Typography>No movies in list...</Typography>}
